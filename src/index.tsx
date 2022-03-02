@@ -1,14 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import Moralis from 'moralis';
+import allReducers from './store/reducers';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
+//? Moralis stuff
+const serverUrl = 'https://qrffii1rrdfg.usemoralis.com:2053/server';
+const appId = 'bcqmnDWLXMo7sMrVFnE4XtoZc1nblT05Fy4HZbfY';
+Moralis.start({ serverUrl, appId });
+
+//? Redux
+const store = createStore(allReducers, composeWithDevTools());
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function
