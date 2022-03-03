@@ -2,7 +2,7 @@ import connectWalletReducer from './connectWalletReducer';
 import { combineReducers } from 'redux';
 
 const allReducers = combineReducers({
-  isWalletConnected: connectWalletReducer,
+  connectedUser: connectWalletReducer,
 });
 
 export default allReducers;

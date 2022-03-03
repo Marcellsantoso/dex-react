@@ -7,8 +7,8 @@ import connectWalletAction from '../store/actions/connectWalletAction';
 import { useState, useEffect } from 'react';
 
 function Swap() {
-  const [isWalletConnected, setWalletConnected] = useState(false);
-  const walletState = useSelector((state: any) => state.isWalletConnected);
+  const [connectedUser, setConnectedUser] = useState(null);
+  const walletState = useSelector((state: any) => state.connectedUser);
   const dispatch = useDispatch();
 
   function swap() {
@@ -16,7 +16,8 @@ function Swap() {
   }
 
   function loadData() {
-    walletState.then((result: boolean) => setWalletConnected(result));
+    if (walletState == null) return;
+    walletState.then((result: any) => setConnectedUser(result));
   }
 
   useEffect(() => {
@@ -69,7 +70,7 @@ function Swap() {
         </div>
 
         <div className="pt-2">
-          {!isWalletConnected ? (
+          {connectedUser == null ? (
             <ActionButton text={'Connect Wallet'} onClick={() => dispatch(connectWalletAction())} />
           ) : (
             <ActionButton text={'SWAP'} onClick={() => swap()} />

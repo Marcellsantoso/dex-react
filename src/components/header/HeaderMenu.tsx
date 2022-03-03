@@ -23,7 +23,7 @@ export default function HeaderMenu() {
         >
           <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-zinc-800 rounded-xl shadow-xl">
             {arrMenu.map((key) => (
-              <div className="px-1 py-1 ">
+              <div className="px-1 py-1" key={key}>
                 <Menu.Item>
                   {({ active }) => (
                     <button
