@@ -22,7 +22,7 @@ function HeaderConnectWallet() {
 
   if (isWalletConnected) return <></>;
   return (
-    <div className="bg-zinc-800 rounded-xl shadow-xl w-36 h-12 flex mt-1">
+    <div className="bg-zinc-800 rounded-xl shadow-xl w-36 h-12 flex">
       <ActionButton text={'Connect Wallet'} onClick={() => dispatch(connectWalletAction())} />
     </div>
   );
