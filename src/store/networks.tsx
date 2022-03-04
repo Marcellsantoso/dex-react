@@ -20,3 +20,16 @@ export const Networks = {
     blockExplorer: 'https://mumbai.polygonscan.com',
   },
 };
+
+export function getNetworkData(chainId: string) {
+  var network = null;
+  Object.keys(Networks).map((key) => {
+    const keyTyped = key as keyof typeof Networks;
+    const item = Networks[keyTyped];
+    if (item.chainId === chainId) {
+      network = item;
+    }
+  });
+
+  return network;
+};

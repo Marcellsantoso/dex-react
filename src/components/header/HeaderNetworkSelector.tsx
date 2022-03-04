@@ -3,30 +3,17 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { Networks } from '../../store/networks';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectNetwork } from '../../store/actions/selectNetworkAction';
 import { useEffect } from 'react';
-import { ActionType } from '../../store/actionType';
+import { RootState } from "store/store";
+import { setNetwork } from "store/slice/networkSlice";
 
 export default function HeaderNetworkSelector() {
-  const [selected, setSelected] = useState(Networks.ETH);
-  const networkState = useSelector((state: any) => state.selectedNetwork);
+  const selected = useSelector((state: RootState) => state.network.value);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    loadNetwork();
-
-    function loadNetwork() {
-      if (networkState == null) return;
-      networkState.then((state: any) => {
-        if (state == null) return;
-        setSelected(state);
-      });
-    }
-  }, [networkState]);
 
   return (
     <div className="w-48">
-      <Listbox value={selected} onChange={(network) => dispatch(selectNetwork(ActionType.SELECT_NETWORK, network))}>
+      <Listbox value={selected} onChange={(network) => dispatch(setNetwork(network))}>
         <div className="relative">
           <Listbox.Button className="relative flex w-full py-3 pl-4 pr-10 h-12 text-left bg-zinc-800 rounded-xl shadow-xl cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500">
             <img src={selected.image} alt={selected.name} className="rounded-full w-6 h-6 mr-3" />
@@ -48,8 +35,7 @@ export default function HeaderNetworkSelector() {
                     <Listbox.Option
                       key={key}
                       className={({ active }) =>
-                        `cursor-default select-none relative py-2 px-4 ${
-                          active ? 'text-white bg-blue-500/20' : 'text-inherit'
+                        `cursor-default select-none relative py-2 px-4 ${active ? 'text-white bg-blue-500/20' : 'text-inherit'
                         }`
                       }
                       value={network}
