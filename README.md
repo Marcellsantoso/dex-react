@@ -6,10 +6,11 @@
 - [x] Tailwind UI
 
 ## Todo
-- [ ] Header & dropdown menu
+- [x] Header & dropdown menu
 - [ ] Save & display wallet address
 - [ ] Token selector popup
 - [ ] Display balance
 - [ ] Swap ( powered by 1inch )
 - [ ] Drawer
 - [ ] Change network
+- [ ] Change theme
