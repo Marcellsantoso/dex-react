@@ -1,32 +1,18 @@
-import { AiFillSetting } from 'react-icons/ai';
-import { BiDownArrowAlt } from 'react-icons/bi';
-import { MdKeyboardArrowDown } from 'react-icons/md';
-import ActionButton from './ActionButton';
-import { useSelector, useDispatch } from 'react-redux';
-import connectWalletAction from '../store/actions/connectWalletAction';
-import { useState, useEffect } from 'react';
+import { AiFillSetting } from "react-icons/ai";
+import { BiDownArrowAlt } from "react-icons/bi";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import ActionButton from "./ActionButton";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/store";
+import { connect } from "../store/slice/userSlice";
 
 function Swap() {
-  const [connectedUser, setConnectedUser] = useState(null);
-  const walletState = useSelector((state: any) => state.connectedUser);
+  const connectedUser = useSelector((state: RootState) => state.user.value);
   const dispatch = useDispatch();
 
   function swap() {
-    console.log('Swap');
+    console.log("Swap");
   }
-
-  useEffect(() => {
-    loadData();
-
-    function loadData() {
-      if (walletState == null) return;
-      walletState.then((result: any) => {
-        if (result == null) return;
-        console.log(result);
-        setConnectedUser(result);
-      });
-    }
-  }, [walletState]);
 
   return (
     <div className="w-full flex justify-center">
@@ -75,9 +61,12 @@ function Swap() {
 
         <div className="pt-2">
           {connectedUser == null ? (
-            <ActionButton text={'Connect Wallet'} onClick={() => dispatch(connectWalletAction())} />
+            <ActionButton
+              text={"Connect Wallet"}
+              onClick={() => dispatch(connect())}
+            />
           ) : (
-            <ActionButton text={'SWAP'} onClick={() => swap()} />
+            <ActionButton text={"SWAP"} onClick={() => swap()} />
           )}
         </div>
       </div>

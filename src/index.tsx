@@ -4,18 +4,11 @@ import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import Moralis from 'moralis';
-import allReducers from './store/reducers';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { Provider } from 'react-redux'
+import { store } from "./store/store";
 
-//? Moralis stuff
-const serverUrl = 'https://qrffii1rrdfg.usemoralis.com:2053/server';
-const appId = 'bcqmnDWLXMo7sMrVFnE4XtoZc1nblT05Fy4HZbfY';
-Moralis.start({ serverUrl, appId });
 
 //? Redux
-const store = createStore(allReducers, composeWithDevTools());
 
 ReactDOM.render(
   <React.StrictMode>
