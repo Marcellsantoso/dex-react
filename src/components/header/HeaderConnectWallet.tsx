@@ -6,50 +6,25 @@ import Lottie from "lottie-react";
 import Loading from "../../loading.json";
 import { RootState } from "../../store/store";
 import { connect } from "../../store/slice/userSlice";
+import { readableBalance } from "utils/Converter";
 
 function HeaderConnectWallet() {
   // const [connectedUser, setConnectedUser] = useState(null);
-  const [userWalletAddress, setUserWalletAddress] = useState("");
-  const [loadingUserBalance, setLoadingUserBalance] = useState(false);
-  const [userWalletBalance, setUserWalletBalance] = useState("0");
+
+  const balance = useSelector((state: RootState) => state.user.balance);
+  const address = useSelector((state: RootState) => state.user.address);
+  const network = useSelector((state: RootState) => state.network);
   const connectedUser = useSelector((state: RootState) => state.user.value);
   const dispatch = useDispatch();
 
-  // function loadData() {
-  //   if (walletState == null) return;
-  //   walletState.then(async (user: any) => {
-  //     if (user == null) return;
-  //     setConnectedUser(user);
-  //     setUserWalletAddress(user.get('ethAddress'));
-  //   });
-  // }
 
-  const loadUserBalance = useCallback(async () => {
-    if (connectedUser == null || userWalletAddress === "") return;
-
-    setLoadingUserBalance(true);
-    const balance = await Moralis.Web3API.account.getNativeBalance({
-      address: userWalletAddress,
-    });
-    setUserWalletBalance(balance.balance);
-    setLoadingUserBalance(false);
-  }, [connectedUser, userWalletAddress]);
-
-
-  useEffect(() => {
-    loadUserBalance();
-  }, [loadUserBalance, userWalletAddress]);
-
+  // console.log(Moralis.Units.Token(balance, network.value.decimal));
   return (
     <div className="bg-zinc-800 rounded-xl shadow-xl w-36 h-12 flex content-center justify-center">
       {connectedUser ? (
-        loadingUserBalance ? (
-          <Lottie animationData={Loading} />
-        ) : (
-          <button className="flex-full text-ellipsis overflow-hidden">
-            {userWalletBalance}
-          </button>
-        )
+        <button className="flex-full text-ellipsis overflow-hidden">
+          {readableBalance(balance, network.value.decimal)} <span className="text-xs font-bold">{network.value.symbol}</span>
+        </button>
       ) : (
         <ActionButton
           text={"Connect Wallet"}

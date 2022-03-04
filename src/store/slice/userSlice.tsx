@@ -1,17 +1,39 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Moralis } from "moralis";
+import { useDispatch } from "react-redux";
 
 export interface UserState {
-  value: any;
+  value: any,
+  address: string;
+  balance: string;
 }
 
 const initialState: UserState = {
   value: null,
+  address: null,
+  balance: null,
 };
+
 
 export const connect = createAsyncThunk("user/connect", async () => {
   const result = await Moralis.authenticate();
-  return JSON.stringify(result);
+  return result;
+});
+
+export const getAddress = createAsyncThunk("user/address", async () => {
+  const result = await Moralis.User.current().get('ethAddress');
+  return result;
+});
+
+export const getBalance = createAsyncThunk("user/balance", async (data: any) => {
+  const balance = await Moralis.Web3API.account.getNativeBalance({
+    address: data.address,
+    chain: data.chainId,
+  });
+  console.log(balance);
+
+
+  return balance;
 });
 
 export const userSlice = createSlice({
@@ -23,8 +45,19 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // User
     builder.addCase(connect.fulfilled, (state, action) => {
       state.value = action.payload;
+    });
+
+    // User address
+    builder.addCase(getAddress.fulfilled, (state, action) => {
+      state.address = action.payload;
+    });
+
+    // User balance
+    builder.addCase(getBalance.fulfilled, (state, action) => {
+      state.balance = action.payload.balance;
     });
   },
 });

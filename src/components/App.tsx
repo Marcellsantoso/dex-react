@@ -1,13 +1,16 @@
 import Header from "./header/Header";
 import Swap from "./Swap";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Moralis } from "moralis";
-import { setUser } from "../store/slice/userSlice";
+import { setUser, getAddress, getBalance } from "../store/slice/userSlice";
 import { getNetworkData, } from "store/networks";
 import { setNetwork } from "store/slice/networkSlice";
+import { RootState } from "store/store";
 
 function App() {
+  const address = useSelector((state: RootState) => state.user.address);
+  const network = useSelector((state: RootState) => state.network);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,11 +22,21 @@ function App() {
       checkUserState();
       checkNetwork();
 
-      Moralis.onChainChanged((network) => { checkNetwork(); });
+      Moralis.onChainChanged((network) => {
+        checkNetwork();
+      });
     });
   }, [dispatch]);
 
-  async function checkUserState() {
+  useEffect(() => {
+    console.log('dispatch get balance');
+    dispatch(getBalance({
+      address: address,
+      chainId: network.value.chainId,
+    }));
+  }, [address, network]);
+
+  function checkUserState() {
     const user = Moralis.User.current();
     if (user != null) {
       dispatch(setUser(user));
@@ -31,6 +44,7 @@ function App() {
   }
 
   async function checkNetwork() {
+    await Moralis.enableWeb3();
     const chainId = Moralis.getChainId();
     const network = getNetworkData(chainId);
     if (network != null) {

@@ -28,13 +28,15 @@ export const setNetwork = createAsyncThunk("setNetwork", async (payload: any) =>
     const user = Moralis.User.current();
     if (user == null) {
       await Moralis.authenticate();
+    } else {
+      if (!Moralis.isWeb3Enabled) {
+        try { await Moralis.enableWeb3(); } catch (e) { }
+      }
     }
 
     // User doesnt have network config yet, so add a new one
-    try {
-      await addNetwork(payload);
-    } catch (e) { }
-    await Moralis.switchNetwork(payload.chainId);
+    try { await addNetwork(payload); } catch (e) { }
+    try { await Moralis.switchNetwork(payload.chainId); } catch (e) { }
 
     return payload;
   } catch (error) {
