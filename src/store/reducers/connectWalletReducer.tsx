@@ -3,8 +3,12 @@ import { Moralis } from 'moralis';
 const connectWalletReducer = async (state: any, action: any) => {
   switch (action.type) {
     case 'CONNECT_WALLET':
-      const result = await Moralis.authenticate({ signingMessage: 'Moralis auth login' });
-      return result;
+      try {
+        const result = await Moralis.authenticate({ signingMessage: 'Moralis auth login' });
+        return result;
+      } catch (e) {
+        return false;
+      }
     default:
       return null;
   }

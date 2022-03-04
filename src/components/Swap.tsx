@@ -15,14 +15,18 @@ function Swap() {
     console.log('Swap');
   }
 
-  function loadData() {
-    if (walletState == null) return;
-    walletState.then((result: any) => setConnectedUser(result));
-  }
-
   useEffect(() => {
     loadData();
-  });
+
+    function loadData() {
+      if (walletState == null) return;
+      walletState.then((result: any) => {
+        if (result == null) return;
+        console.log(result);
+        setConnectedUser(result);
+      });
+    }
+  }, [walletState]);
 
   return (
     <div className="w-full flex justify-center">
